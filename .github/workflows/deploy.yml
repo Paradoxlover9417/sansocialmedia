@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t sansocialmedia:latest .
+          docker build -t paradoxlover9417/sansocialmedia:latest .
           echo "DOCKER_IMAGE=paradoxlover9417/sansocialmedia:latest" >> $GITHUB_ENV
 
       - name: Sign in to DockerHub
