@@ -1,0 +1,13 @@
+name: nas_deploy
+
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+    branches: [dev]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: echo "test"
