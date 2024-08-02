@@ -36,7 +36,7 @@ jobs:
 
       - name: Push Docker Image
         run: docker push ${{ env.DOCKER_IMAGE }}
-      # sshpass설치
+      # sshpass설치, 포트번호 설정
       - name: SSH access to NAS
         uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -48,7 +48,7 @@ jobs:
           NAS_USERNAME: ${{ secrets.NAS_USERNAME }}
           NAS_PASSWORD: ${{ secrets.NAS_PASSWORD }}
         run: |
-          sshpass -p $NAS_PASSWORD ssh -o StrictHostKeyChecking=no $NAS_USERNAME@$NAS_HOST << EOF
+          sshpass -p $NAS_PASSWORD ssh -o StrictHostKeyChecking=no -p 51235 $NAS_USERNAME@$NAS_HOST << EOF
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
             docker pull ${{ env.DOCKER_IMAGE }}
             docker stop sansocialmedia || true
