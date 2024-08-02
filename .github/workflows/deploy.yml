@@ -36,7 +36,7 @@ jobs:
 
       - name: Push Docker Image
         run: docker push ${{ env.DOCKER_IMAGE }}
-      # nas 키 변경
+      # port 변경
       - name: SSH access to NAS
         uses: webfactory/ssh-agent@v0.9.0
         with:
