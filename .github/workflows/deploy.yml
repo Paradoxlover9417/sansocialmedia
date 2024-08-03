@@ -57,7 +57,7 @@ jobs:
 #            docker run -d -p 8080:8080 --name sansocialmedia $DOCKER_IMAGE
 #          EOF
 
-      # 포트 수정
+      # 명령 수정
       - name: Deploy to NAS
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -67,7 +67,10 @@ jobs:
           port: ${{ secrets.NAS_PORT }}
           script: |
             export PW = ${{ secrets.NAS_PASSWORD }}
-            echo "test"
+            echo $PW | sudo -S docker pull paradoxlover9417/sansocialmedia:latest
+            echo $PW | sudo -S docker stop sansocialmedia || true
+            echo $PW | sudo -S docker rm sansocialmedia || true
+            echo $PW | sudo -S docker run -d -p 8080:8080 --name sansocialmedia paradoxlover9417/sansocialmedia:latest
           
 
 
