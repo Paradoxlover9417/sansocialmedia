@@ -23,6 +23,15 @@ jobs:
       - name: application.yml 생성
         run: echo "${{ secrets.SPRING_YML }}" > ./src/main/resources/application.yml
 
+      - name: Verify application.yml exists
+        run: |
+          if [ -f "./src/main/resources/application.yml" ]; then
+            echo "application.yml file exists.";
+          else
+            echo "application.yml file does not exist.";
+            exit 1;
+          fi
+
       - name: Build with Gradle
         run: ./gradlew clean build
 
