@@ -57,6 +57,7 @@ jobs:
 #            docker run -d -p 8080:8080 --name sansocialmedia $DOCKER_IMAGE
 #          EOF
 
+      # 포트 수정
       - name: Deploy to NAS
         uses: appleboy/ssh-action@v1.0.3
         with:
