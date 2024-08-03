@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class SansocialmediaApplication {
-
+	// ssh 포트 테스트
 	public static void main(String[] args) {
 		SpringApplication.run(SansocialmediaApplication.class, args);
 	}
