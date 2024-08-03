@@ -58,7 +58,7 @@ jobs:
 #          EOF
 
       - name: Deploy to NAS
-        uses: apple-boy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.NAS_HOST }}
           username: ${{ secrets.NAS_USERNAME }}
