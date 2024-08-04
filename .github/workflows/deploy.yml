@@ -24,7 +24,9 @@ jobs:
         run: echo "${{ secrets.SPRING_ENV }}" > ./src/main/resources/application.yml
 
       - name: test application.yml 생성
-        run: echo "${{ secrets.SPRING_TEST_ENV }}" > ./src/test/resources/application.yml
+        run: |
+          mkdir -p ./src/test/resources
+          echo "${{ secrets.SPRING_TEST_ENV }}" > ./src/test/resources/application.yml
 
       - name: Verify application.yml exists
         run: cat ./src/main/resources/application.yml
