@@ -53,7 +53,7 @@ jobs:
             echo $PW | sudo -S docker pull paradoxlover9417/sansocialmedia:latest
             echo $PW | sudo -S docker stop sansocialmedia || true
             echo $PW | sudo -S docker rm sansocialmedia || true
-            echo $PW | sudo -S docker run -d -p 8080:8080 --name sansocialmedia paradoxlover9417/sansocialmedia:latest
+            echo $PW | sudo -S docker run -d -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev --name sansocialmedia paradoxlover9417/sansocialmedia:latest
           
 
 
