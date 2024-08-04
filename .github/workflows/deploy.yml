@@ -21,7 +21,10 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: application.yml 생성
-        run: echo "${{ secrets.SPRING_YML }}" > ./src/main/resources/application.yml
+        run: echo "${{ secrets.SPRING_ENV }}" > ./src/main/resources/application.yml
+
+      - name: Verify application.yml exists
+        run: cat ./src/main/resources/application.yml
 
       - name: Build with Gradle
         run: ./gradlew clean build
