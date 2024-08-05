@@ -3,7 +3,7 @@ name: nas_deploy
 on:
   pull_request:
     types: [opened, synchronize, closed]
-    branches: [dev]
+    branches: [dev, main]
 
 jobs:
   test:
@@ -12,12 +12,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-
-  image-build:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -42,9 +36,48 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
+  set-environment:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+    steps:
+      - name: Set Environment
+        id: set-env
+        run: |
+          echo ${{ github.base.ref }}
+          echo "environment=dev" >> $GITHUB_OUTPUT
+        
+          if [[ ${{ github.base.ref }} == "main" ]]; then
+            echo "environment=prod" >> $GITHUB_OUTPUT
+          fi
+
+      - name: check environment
+        run: echo ${{ steps.set-env.outputs.environment }}
+
+  image-build:
+    runs-on: ubuntu-latest
+    needs: [set-environment]
+    strategy:
+      matrix:
+        environment: ["${{ needs.set-environment.outputs.environment }}"]
+    environment: ${{ matrix.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Docker Image Tag and Platform
+        run: |
+          if [ "${{ matrix.environment }}" = "prod" ]; then
+            echo "DOCKER_TAG=paradoxlover9417/sansocialmedia-prod:latest" >> $GITHUB_ENV
+            echo "DOCKER_PLATFORM=linux/arm64/v3" >> $GITHUB_ENV
+          else
+            echo "DOCKER_TAG=paradoxlover9417/sansocialmedia-dev:latest" >> $GITHUB_ENV
+            echo "DOCKER_PLATFORM=linux/arm64/v8" >> $GITHUB_ENV
+          fi
+
       - name: Build Docker Image
         run: |
-          docker build --platform linux/arm64/v8 -t paradoxlover9417/sansocialmedia:latest .
+          docker build --platform ${{ env.DOCKER_PLATFORM }} -t ${{ env.DOCKER_TAG }} .
           echo "DOCKER_IMAGE=paradoxlover9417/sansocialmedia:latest" >> $GITHUB_ENV
 
       - name: Sign in to DockerHub
@@ -55,9 +88,14 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [image-build]
+    needs: [set-environment, image-build]
+    strategy:
+      matrix:
+        environment: ["${{ needs.set-environment.outputs.environment }}"]
+    environment: ${{ matrix.environment }}
     steps:
       - name: Deploy to NAS
+        if: ${{ matrix.environment == 'dev' }}
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.NAS_HOST }}
@@ -67,10 +105,43 @@ jobs:
           script: |
             export PATH=$PATH:/usr/local/bin
             export PW=${{ secrets.NAS_PASSWORD }}
-            echo $PW | sudo -S docker pull paradoxlover9417/sansocialmedia:latest
-            echo $PW | sudo -S docker stop sansocialmedia || true
-            echo $PW | sudo -S docker rm sansocialmedia || true
-            echo $PW | sudo -S docker run -d -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev --name sansocialmedia paradoxlover9417/sansocialmedia:latest
-          
+            echo $PW | sudo -S docker pull paradoxlover9417/sansocialmedia-dev:latest
+            echo $PW | sudo -S docker stop sansocialmedia-dev || true
+            echo $PW | sudo -S docker rm sansocialmedia-dev || true
+            echo $PW | sudo -S docker run -d -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev --name sansocialmedia-dev paradoxlover9417/sansocialmedia-dev:latest
 
+      - name: Deploy to AWS
+        if: ${{ matrix.environment == 'prod' }}
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          script: |
+            echo sudo docker pull paradoxlover9417/sansocialmedia-prod:latest
+            echo sudo docker stop sansocialmedia-prod || true
+            echo sudo docker rm sansocialmedia-prod || true
+            echo sudo docker run -d -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod --name sansocialmedia-prod paradoxlover9417/sansocialmedia-prod:latest
+            
+
+  create-pull-request:
+    if: needs.set-environment.outputs.environment == 'dev'
+    runs-on: ubuntu-latest
+    needs: [set-environment, deploy]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: gh auth login
+        run: |
+          echo "${{ secrets.PERSONAL_ACCESS_TOKEN }}" | gh auth login --with-token
+
+      - name: Create Branch
+        run: |
+          git checkout -b release/${{ github.run_id }}
+          git push origin release/${{ github.run_id }}
+
+      - name: Create Pull Request
+        run: |
+          gh pr create --base main --head release/${{ github.run_id }} --title "release/${{ github.run_id }}" --body "release pull request to main"
 
