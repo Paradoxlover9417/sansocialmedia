@@ -63,7 +63,8 @@ jobs:
         environment: ["${{ needs.set-environment.outputs.environment }}"]
     environment: ${{ matrix.environment }}
     steps:
-      - uses: actions/checkout@v4
+      - name: checkout
+        uses: actions/checkout@v4
 
       - name: Set Docker Image Tag and Platform
         run: |
