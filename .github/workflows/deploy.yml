@@ -78,7 +78,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build --platform ${{ env.DOCKER_PLATFORM }} -t ${{ env.DOCKER_TAG }} .
-          echo "DOCKER_IMAGE=paradoxlover9417/sansocialmedia:latest" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE=${{ env.DOCKER_TAG }}" >> $GITHUB_ENV
 
       - name: Sign in to DockerHub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
