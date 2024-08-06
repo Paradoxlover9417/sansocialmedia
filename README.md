@@ -50,4 +50,4 @@
 > 로그인 시 JWT 발급
 > 
 > Resolves: #122
-Related to: #30, #50
+> Related to: #30, #50
