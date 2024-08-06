@@ -48,7 +48,7 @@ jobs:
           echo ${{ github.ref }}
           echo "environment=dev" >> $GITHUB_OUTPUT
         
-          if [[ ${{ github.ref }} == "main" ]]; then
+          if [[ ${{ github.ref }} == *"main"* ]]; then
             echo "environment=prod" >> $GITHUB_OUTPUT
           fi
 
