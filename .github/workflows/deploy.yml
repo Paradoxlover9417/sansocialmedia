@@ -115,7 +115,7 @@ jobs:
     needs: [set-environment, image-build]
     permissions:
       id-token: write
-      contents: read
+      contents: write
     strategy:
       matrix:
         environment: ["${{ needs.set-environment.outputs.environment }}"]
