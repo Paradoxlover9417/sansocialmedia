@@ -93,7 +93,7 @@ jobs:
         run: |
           if [ "${{ matrix.environment }}" = "prod" ]; then
             echo "DOCKER_TAG=paradoxlover9417/sansocialmedia-prod:latest" >> $GITHUB_ENV
-            echo "DOCKER_PLATFORM=linux/arm64/v3" >> $GITHUB_ENV
+            echo "DOCKER_PLATFORM=linux/amd64/v3" >> $GITHUB_ENV
           else
             echo "DOCKER_TAG=paradoxlover9417/sansocialmedia-dev:latest" >> $GITHUB_ENV
             echo "DOCKER_PLATFORM=linux/arm64/v8" >> $GITHUB_ENV
