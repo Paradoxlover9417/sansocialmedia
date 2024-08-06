@@ -142,10 +142,10 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
-            echo sudo docker pull paradoxlover9417/sansocialmedia-prod:latest
-            echo sudo docker stop sansocialmedia-prod || true
-            echo sudo docker rm sansocialmedia-prod || true
-            echo sudo docker run -d -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod --name sansocialmedia-prod paradoxlover9417/sansocialmedia-prod:latest
+            sudo docker pull paradoxlover9417/sansocialmedia-prod:latest
+            sudo docker stop sansocialmedia-prod || true
+            sudo docker rm sansocialmedia-prod || true
+            sudo docker run -d -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod --name sansocialmedia-prod paradoxlover9417/sansocialmedia-prod:latest
             
 
   create-pull-request:
