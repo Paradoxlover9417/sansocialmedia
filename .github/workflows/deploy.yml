@@ -48,7 +48,7 @@ jobs:
           echo ${{ github.ref }}
           echo "environment=dev" >> $GITHUB_OUTPUT
         
-          if [[ ${{ github.ref }} == "main" ]]; then
+          if [[ ${{ github.ref }} == *"main"* ]]; then
             echo "environment=prod" >> $GITHUB_OUTPUT
           fi
 
@@ -93,7 +93,7 @@ jobs:
         run: |
           if [ "${{ matrix.environment }}" = "prod" ]; then
             echo "DOCKER_TAG=paradoxlover9417/sansocialmedia-prod:latest" >> $GITHUB_ENV
-            echo "DOCKER_PLATFORM=linux/arm64/v3" >> $GITHUB_ENV
+            echo "DOCKER_PLATFORM=linux/amd64/v3" >> $GITHUB_ENV
           else
             echo "DOCKER_TAG=paradoxlover9417/sansocialmedia-dev:latest" >> $GITHUB_ENV
             echo "DOCKER_PLATFORM=linux/arm64/v8" >> $GITHUB_ENV
@@ -113,9 +113,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [set-environment, image-build]
-    permissions:
-      id-token: write
-      contents: read
     strategy:
       matrix:
         environment: ["${{ needs.set-environment.outputs.environment }}"]
@@ -145,14 +142,16 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
-            echo sudo docker pull paradoxlover9417/sansocialmedia-prod:latest
-            echo sudo docker stop sansocialmedia-prod || true
-            echo sudo docker rm sansocialmedia-prod || true
-            echo sudo docker run -d -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod --name sansocialmedia-prod paradoxlover9417/sansocialmedia-prod:latest
-            
+            sudo docker pull paradoxlover9417/sansocialmedia-prod:latest
+            sudo docker stop sansocialmedia-prod || true
+            sudo docker rm sansocialmedia-prod || true
+            sudo docker run -d -p 80:8080 -e SPRING_PROFILES_ACTIVE=prod --name sansocialmedia-prod paradoxlover9417/sansocialmedia-prod:latest
 
   create-pull-request:
     if: needs.set-environment.outputs.environment == 'dev'
+    permissions:
+      id-token: write
+      contents: write
     runs-on: ubuntu-latest
     needs: [set-environment, deploy]
     steps:
@@ -171,4 +170,3 @@ jobs:
       - name: Create Pull Request
         run: |
           gh pr create --base main --head release/${{ github.run_id }} --title "release/${{ github.run_id }}" --body "release pull request to main"
-
