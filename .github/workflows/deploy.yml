@@ -145,7 +145,7 @@ jobs:
             sudo docker pull paradoxlover9417/sansocialmedia-prod:latest
             sudo docker stop sansocialmedia-prod || true
             sudo docker rm sansocialmedia-prod || true
-            sudo docker run -d -p 80:8080 -e SPRING_PROFILES_ACTIVE=prod --name sansocialmedia-prod paradoxlover9417/sansocialmedia-prod:latest
+            sudo docker run -d -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod --name sansocialmedia-prod paradoxlover9417/sansocialmedia-prod:latest
 
   create-pull-request:
     if: needs.set-environment.outputs.environment == 'dev'
