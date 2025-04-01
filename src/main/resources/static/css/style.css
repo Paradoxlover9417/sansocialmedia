@@ -1,0 +1,323 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #e2e2e2;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #e2e2e2;
+}
+
+.control-panel {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+button {
+    background: rgba(79, 70, 229, 0.7);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+button:hover {
+    background: rgba(79, 70, 229, 0.9);
+    transform: translateY(-2px);
+}
+
+.info-display {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.info-label {
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.info-value {
+    color: #4fd1c5;
+    font-weight: 500;
+}
+
+.section-container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    margin-bottom: 25px;
+}
+
+.file-list-header {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1.5fr 0.5fr 0.5fr 0.5fr;
+    gap: 15px;
+    padding: 15px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: bold;
+    color: #a0aec0;
+    text-align: center;
+}
+
+.file-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1.5fr 0.5fr 0.5fr 0.5fr;
+    gap: 15px;
+    padding: 12px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    align-items: center;
+}
+
+.db-version-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 15px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: bold;
+    color: #a0aec0;
+    text-align: center;
+}
+
+/* Add specific styles for db-row to match file-row structure */
+.db-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 12px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    align-items: center;
+}
+
+/* Add style for db-version to match other cell styles */
+.db-version {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list-content {
+    margin-top: 10px;
+    min-height: 200px;
+}
+
+.empty-message, .loading-message, .error-message {
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+}
+
+.error-message {
+    color: rgba(229, 62, 62, 0.8);
+}
+
+.download-btn, .delete-btn {
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    width: 85%;
+    margin: 0 auto;
+    display: block;
+}
+
+.download-btn {
+    background: rgba(66, 153, 225, 0.5);
+}
+
+.download-btn:hover {
+    background: rgba(66, 153, 225, 0.8);
+}
+
+.delete-btn {
+    background: rgba(229, 62, 62, 0.5);
+}
+
+.delete-btn:hover {
+    background: rgba(229, 62, 62, 0.8);
+}
+
+.section-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #a0aec0;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-content {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+/* S3 정보 컨테이너 스타일 */
+.s3-info-container {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.s3-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.s3-info-icon {
+    font-size: 18px;
+    color: #4fd1c5;
+}
+
+.s3-info-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* 카운트 정보를 위한 스타일 - 파일 인풋 옆에 위치하도록 수정 */
+.count-display {
+    display: flex;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.section-header > *:first-child {
+    margin-right: auto; /* 첫 번째 요소 이후 오른쪽으로 밀어냄 */
+}
+
+/* 요소들의 순서 지정 */
+.count-display {
+    order: 1;
+}
+
+#fileInput {
+    order: 2;
+    margin-left: 0;
+}
+
+#uploadButton {
+    order: 3;
+    margin-left: 15px;
+}
+
+.file-path, .file-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-date {
+    white-space: nowrap;
+    overflow: visible;
+}
+
+.file-size {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+}
+
+.file-action {
+    text-align: center;
+}
+
+#fileInput {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#fileInput:hover {
+    background: rgba(79, 70, 229, 0.1);
+}
+
+#fileInput::file-selector-button {
+    background: rgba(79, 70, 229, 0.7);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-right: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    content: "파일 선택";
+}
+
+#fileInput::file-selector-button:hover {
+    background: rgba(79, 70, 229, 0.9);
+}
+
+#uploadButton {
+    padding: 10px 15px;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .count-display {
+        margin: 10px 0;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    #fileInput {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    #uploadButton {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .s3-info-container {
+        flex-direction: column;
+    }
+
+    .s3-info-item {
+        margin-bottom: 5px;
+    }
+}
