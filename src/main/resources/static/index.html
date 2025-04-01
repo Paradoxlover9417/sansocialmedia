@@ -3,8 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <title>Sansocialmedia</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="js/fileValidation.js"></script>
+    <script defer src="js/script.js"></script>
 </head>
 <body>
-    <h1>Index 페이지입니다. dev 브랜치 풀리퀘스트 머지 테스트.</h1>
+<div class="container">
+    <h1>서버 페이지</h1>
+
+    <!-- S3 버킷 섹션 -->
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-title">
+                <div>S3 버킷 정보</div>
+                <div class="info-display">
+                    <span class="info-label">버킷 저장 경로:</span>
+                    <span id="bucket-name" class="info-value">s3://</span>
+                </div>
+            </div>
+            <div class="section-content">
+                <div class="count-display">
+                    <div class="info-display">
+                        <span class="info-label">남은 업로드 횟수:</span>
+                        <span id="upload-count" class="info-value">0</span>
+                    </div>
+                    <div class="info-display">
+                        <span class="info-label">남은 다운로드 횟수:</span>
+                        <span id="download-count" class="info-value">0</span>
+                    </div>
+                </div>
+                <input type="file" id="fileInput" />
+                <button id="uploadButton">업로드</button>
+            </div>
+        </div>
+
+        <div class="s3-info-container">
+            <div class="s3-info-item">
+                <span class="s3-info-icon">📁</span>
+                <span class="s3-info-text">최대 파일 용량은 5MB입니다.</span>
+            </div>
+            <div class="s3-info-item">
+                <span class="s3-info-icon">📄</span>
+                <span class="s3-info-text">사용가능한 확장자는 JPG, PNG, PDF, TXT, CSV입니다.</span>
+            </div>
+            <div class="s3-info-item">
+                <span class="s3-info-icon">🔄</span>
+                <span class="s3-info-text">업다운로드 횟수는 최대 5회이며 6시간마다 초기화됩니다.</span>
+            </div>
+        </div>
+
+        <div class="file-list-header">
+            <div>접두어</div>
+            <div>파일 이름</div>
+            <div>마지막 수정일시</div>
+            <div>파일 용량</div>
+            <div>다운로드</div>
+            <div>삭제</div>
+        </div>
+        <div id="file-list" class="list-content">
+            <div class="empty-message">파일목록이 여기에 표시됩니다</div>
+        </div>
+    </div>
+
+    <!-- DB 정보 섹션 -->
+    <div class="section-container">
+        <div class="section-title">
+            <div>데이터베이스 정보</div>
+            <div class="info-display">
+                <span class="info-label">DB:</span>
+                <span id="db-name" class="info-value">dev_database</span>
+            </div>
+        </div>
+
+        <div class="db-version-header">
+            <div>Flyway 버전</div>
+            <div>수정일시</div>
+        </div>
+        <div id="db-version-list" class="list-content">
+            <div class="empty-message">DB 버전 내역이 여기에 표시됩니다</div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
