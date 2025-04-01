@@ -37,6 +37,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// aws 관련 라이브러리
+	implementation("software.amazon.awssdk:s3:2.31.6")
 }
 
 tasks.named('test') {
